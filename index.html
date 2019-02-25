@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
     <meta name="viewport" content="width=1024">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css">
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.16.2/dist/phaser.js"></script>
+    <script src="lib/phaser.js"></script>
 </head>
+
 <body>
     <script>
+        'use strict';
         var config = {
             type: Phaser.AUTO,
             width: 800,
@@ -25,37 +28,44 @@
                 create: create
             }
         };
-    
+
         var game = new Phaser.Game(config);
-    
-        function preload ()
-        {    
+
+        function preload() {
             this.load.image({ key: 'sky', url: 'assets/space3.png' });
-            // this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-            this.load.image({ key: 'logo', url: 'assets/cat.png' });
+            this.load.image({ key: 'cat', url: 'assets/cat.png' });
             this.load.image({ key: 'red', url: 'assets/red.png' });
+            this.load.image({ key: 'blue', url: 'assets/blue.png' });
+            this.load.image({ key: 'white', url: 'assets/white.png' });
+            this.load.image({ key: 'yellow', url: 'assets/yellow.png' });
         }
-    
-        function create ()
-        {
+
+        function create() {
             this.add.image(400, 300, 'sky');
-    
-            var particles = this.add.particles('red');
-    
-            var emitter = particles.createEmitter({
-                speed: 100,
-                scale: { start: 1, end: 0 },
-                blendMode: 'ADD'
-            });
-    
-            var logo = this.physics.add.image(400, 100, 'logo');
-    
-            logo.setVelocity(100, 200);
-            logo.setBounce(1, 1);
-            logo.setCollideWorldBounds(true);
-    
-            emitter.startFollow(logo);
+
+            var particles = [
+                this.add.particles('red'),
+                this.add.particles('white'),
+                this.add.particles('yellow'),
+                this.add.particles('blue')
+            ];
+
+            var cat = this.physics.add.image(400, 100, 'cat');
+
+            cat.setVelocity(100, 200);
+            cat.setBounce(1, 1);
+            cat.setCollideWorldBounds(true);
+
+            for (let ele in particles) {
+                let emitter = particles[ele].createEmitter({
+                    speed: 300,
+                    scale: { start: 0.5, end: 0 },
+                    blendMode: 'SCREEN'
+                });
+                emitter.startFollow(cat);
+            }
         }
-        </script>
+    </script>
 </body>
+
 </html>
